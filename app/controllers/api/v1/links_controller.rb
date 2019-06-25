@@ -2,7 +2,7 @@ module Api
   module V1
     class LinksController < ApplicationController
       def index
-        links = Link.order('created_at DESC')
+        links = Link.order('visites DESC')
         render json: {
                         status: 'SUCCESS',
                         message: 'Loaded Links',
