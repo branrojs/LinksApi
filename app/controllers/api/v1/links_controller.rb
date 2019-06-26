@@ -24,13 +24,19 @@ module Api
       end
 
       def create
-        link = Link.new(link_params_to_create)
-        if link.save
-
-          LinkJob.perform_later link.url
-
+        shorted = get_fake
+        long = link_params_to_create
+        if long.present?
+          link = Link.new(url: long['url'], short_url: shorted)
+        else
           render json: {
-            status: 'SUCCESS', message: 'Link saved', data: link.url
+            status: 'ERROR', message: 'Link not saved', data: link
+          }, status: :unprocessable_entity
+        end
+        if link.save
+          LinkJob.perform_later link.url
+          render json: {
+            status: 'SUCCESS', message: 'Link saved', data: link.short_url
           }, status: :ok
         else
           render json: {
@@ -45,10 +51,17 @@ module Api
         params.permit(:url)
       end
 
-      def link_params_to_update
-        params.permit(:title, :url, :short_url, :visites)
+      def get_fake
+        fake = ''
+        while true
+          fake = Faker::Alphanumeric.alphanumeric(10)
+          link = Link.find_by(short_url: fake)
+          if !link.present?
+            break
+          end
+        end
+        return fake
       end
-
     end
   end
 end
