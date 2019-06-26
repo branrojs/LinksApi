@@ -16,10 +16,10 @@ ActiveRecord::Schema.define(version: 2019_06_25_051325) do
   enable_extension "plpgsql"
 
   create_table "links", force: :cascade do |t|
-    t.string "title"
-    t.string "url"
-    t.string "short_url"
-    t.integer "visites"
+    t.string "title", default: "", null: false
+    t.string "url", null: false
+    t.string "short_url", default: "", null: false
+    t.integer "visites", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
