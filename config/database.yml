@@ -1,21 +1,22 @@
 default: &default
   adapter: postgresql
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  timeout: 5000
-  username: postgres
-  password: oveja123
+  encoding: unicode
+  host: dbp
+  username: oveja
+  password: oveja
+  pool: 5
 
 development:
   <<: *default
   database: linksApi_dev
-  username: postgres
-  password: oveja123
+  username: oveja
+  password: oveja
 
 test:
   <<: *default
   database: linksApi_test
-  username: postgres
-  password: oveja123
+  username: oveja
+  password: oveja
 
 production:
   <<: *default
