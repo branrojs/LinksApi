@@ -24,13 +24,13 @@ module Api
       end
 
       def create
-        shorted = get_fake
+        shorted = do_fake
         long = link_params_to_create
         if long.present?
           link = Link.new(url: long['url'], short_url: shorted)
         else
           render json: {
-            status: 'ERROR', message: 'Link not saved', data: link
+            status: 'ERROR', message: 'Link not saved', data: link.errors
           }, status: :unprocessable_entity
         end
         if link.save
@@ -40,7 +40,7 @@ module Api
           }, status: :ok
         else
           render json: {
-            status: 'ERROR', message: 'Link not saved', data: link
+            status: 'ERROR', message: 'Link not saved', data: link.errors
           }, status: :unprocessable_entity
         end
       end
@@ -51,7 +51,7 @@ module Api
         params.permit(:url)
       end
 
-      def get_fake
+      def do_fake
         fake = ''
         while true
           fake = Faker::Alphanumeric.alphanumeric(10)
